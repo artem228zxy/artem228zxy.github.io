@@ -26,10 +26,14 @@
       top: 50%;
       transform: translateY(-50%);
     }
-    nav a {
+    nav a, nav button {
       color: #fff;
       margin: 0 15px;
       text-decoration: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
     }
     .content {
       padding: 20px;
@@ -67,6 +71,34 @@
       bottom: 0;
       width: 100%;
     }
+    /* Стили для модальных окон авторизации */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0,0,0,0.5);
+    }
+    .modal-content {
+      background-color: #fff;
+      margin: 10% auto;
+      padding: 20px;
+      max-width: 400px;
+      border-radius: 5px;
+    }
+    .modal-content input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+    .modal-content button {
+      padding: 10px 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
@@ -77,6 +109,9 @@
       <a href="#home">Главная</a>
       <a href="#about">О нас</a>
       <a href="#contact">Контакты</a>
+      <!-- Кнопки быстрого входа и регистрации -->
+      <button id="login-btn">Вход</button>
+      <button id="register-btn">Регистрация</button>
     </nav>
   </header>
 
@@ -109,13 +144,19 @@
     <p>&copy; 2025 Мой сайт</p>
   </footer>
 
-  <script>
-    // Скрипт для базового вывода сообщения в консоль при загрузке страницы
-    document.addEventListener('DOMContentLoaded', function() {
-      console.log('Сайт загружен и работает!');
-    });
-  </script>
-  <!-- Подключаем отдельный скрипт для ленты популярных работ -->
+  <!-- Модальное окно для авторизации/регистрации -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content">
+      <h3 id="modal-title">Вход</h3>
+      <input type="text" id="username" placeholder="Логин">
+      <input type="password" id="password" placeholder="Пароль">
+      <button id="submit-auth">Отправить</button>
+      <button id="close-modal">Закрыть</button>
+    </div>
+  </div>
+
   <script src="feed.js"></script>
+  <!-- Клиентский скрипт для работы с авторизацией -->
+  <script src="auth-client.js"></script>
 </body>
 </html>
