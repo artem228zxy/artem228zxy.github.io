@@ -1,437 +1,77 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // ===== Logo Handling =====
-  const logoImage = document.getElementById('logoImage');
-  const logoContainer = document.getElementById('logoContainer');
-  
-  // Set the logo URL
-  const logoUrl = "https://media.istockphoto.com/id/1225517650/uk/%D1%84%D0%BE%D1%82%D0%BE/%D0%BE%D0%B4%D0%B8%D0%BD-%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%B8%D0%B9-%D0%B4%D1%83%D0%B1-%D0%BD%D0%B0-%D0%BB%D1%83%D0%B7%D1%96.jpg?s=612x612&w=0&k=20&c=xdHVH2LJ40EnQUaLl9PxSc1EI_8VANv2lPF-ag-lLWQ=";
-  
-  // Set the logo image source
-  if (logoImage) {
-    logoImage.src = logoUrl;
-    logoImage.alt = "ВашБренд Логотип";
-  }
-  
-  // Enable logo upload functionality
-  const logoUpload = document.getElementById('logoUpload');
-  if (logoUpload) {
-    logoUpload.addEventListener('change', function(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          logoImage.src = e.target.result;
-          
-          // Save to localStorage for persistence
-          localStorage.setItem('customLogo', e.target.result);
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-  
-  // Check if there's a previously uploaded logo in localStorage
-  const savedLogo = localStorage.getItem('customLogo');
-  if (savedLogo && logoImage) {
-    logoImage.src = savedLogo;
-  }
-  
-  // ===== Mobile Navigation =====
-  const hamburger = document.querySelector('.hamburger');
-  const navLinks = document.querySelector('.nav-links');
-  
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', function() {
-      navLinks.classList.toggle('active');
-    });
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-      if (!event.target.closest('.nav-links') && !event.target.closest('.hamburger') && navLinks.classList.contains('active')) {
-        navLinks.classList.remove('active');
-      }
-    });
-    
-    // Close menu when clicking on a link
-    document.querySelectorAll('.nav-links a').forEach(link => {
-      link.addEventListener('click', function() {
-        navLinks.classList.remove('active');
-      });
-    });
-  }
-  
-  // ===== Smooth Scrolling for Navigation Links =====
-  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function(e) {
-      e.preventDefault();
-      
-      const targetId = this.getAttribute('href');
-      if (targetId === '#') return;
-      
-      const targetElement = document.querySelector(targetId);
-      if (targetElement) {
-        window.scrollTo({
-          top: targetElement.offsetTop - 70, // Account for fixed header
-          behavior: 'smooth'
-        });
-      }
-    });
-  });
-  
-  // ===== Back to Top Button =====
-  const backToTopButton = document.createElement('div');
-  backToTopButton.className = 'back-to-top';
-  backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-  document.body.appendChild(backToTopButton);
-  
-  window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 300) {
-      backToTopButton.classList.add('visible');
-    } else {
-      backToTopButton.classList.remove('visible');
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой простой сайт</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
     }
-  });
-  
-  backToTopButton.addEventListener('click', function() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  });
-  
-  // ===== Scroll Animation for Elements =====
-  const fadeElements = document.querySelectorAll('.fade-in');
-  
-  function checkFade() {
-    fadeElements.forEach(element => {
-      const elementPosition = element.getBoundingClientRect().top;
-      const windowHeight = window.innerHeight;
-      
-      if (elementPosition < windowHeight - 100) {
-        element.classList.add('show');
-      }
-    });
-  }
-  
-  // Check elements on load
-  checkFade();
-  
-  // Check elements on scroll
-  window.addEventListener('scroll', checkFade);
-  
-  // ===== Gallery Modal =====
-  const galleryItems = document.querySelectorAll('.gallery-item');
-  const modal = document.querySelector('.modal');
-  
-  if (galleryItems.length > 0) {
-    // Create modal if it doesn't exist
-    if (!modal) {
-      const newModal = document.createElement('div');
-      newModal.className = 'modal';
-      newModal.innerHTML = `
-        <div class="close-modal"><i class="fas fa-times"></i></div>
-        <div class="modal-content">
-          <img src="" alt="Галерея изображение">
-        </div>
-      `;
-      document.body.appendChild(newModal);
-      
-      const closeModal = newModal.querySelector('.close-modal');
-      closeModal.addEventListener('click', function() {
-        newModal.style.display = 'none';
-        document.body.style.overflow = 'auto'; // Enable scrolling again
-      });
-      
-      // Close modal when clicking outside the image
-      newModal.addEventListener('click', function(e) {
-        if (e.target === newModal) {
-          newModal.style.display = 'none';
-          document.body.style.overflow = 'auto'; // Enable scrolling again
-        }
-      });
-      
-      // Close modal with ESC key
-      document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && newModal.style.display === 'flex') {
-          newModal.style.display = 'none';
-          document.body.style.overflow = 'auto'; // Enable scrolling again
-        }
-      });
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 20px;
+      text-align: center;
     }
-    
-    // Add click event to gallery items
-    galleryItems.forEach(item => {
-      item.addEventListener('click', function() {
-        const imgSrc = this.querySelector('img').src;
-        const modal = document.querySelector('.modal');
-        modal.querySelector('.modal-content img').src = imgSrc;
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden'; // Disable scrolling when modal is open
-      });
-    });
-  }
-  
-  // ===== Testimonial Slider =====
-  const testimonials = document.querySelectorAll('.testimonial');
-  const prevBtn = document.querySelector('.prev-btn');
-  const nextBtn = document.querySelector('.next-btn');
-  
-  if (testimonials.length > 0) {
-    let currentTestimonial = 0;
-    
-    function showTestimonial(index) {
-      testimonials.forEach(testimonial => {
-        testimonial.classList.remove('active');
-      });
-      
-      testimonials[index].classList.add('active');
+    nav a {
+      color: #fff;
+      margin: 0 15px;
+      text-decoration: none;
     }
-    
-    // Show first testimonial initially
-    showTestimonial(currentTestimonial);
-    
-    if (prevBtn && nextBtn) {
-      prevBtn.addEventListener('click', function() {
-        currentTestimonial--;
-        if (currentTestimonial < 0) {
-          currentTestimonial = testimonials.length - 1;
-        }
-        showTestimonial(currentTestimonial);
-      });
-      
-      nextBtn.addEventListener('click', function() {
-        currentTestimonial++;
-        if (currentTestimonial >= testimonials.length) {
-          currentTestimonial = 0;
-        }
-        showTestimonial(currentTestimonial);
-      });
+    .content {
+      padding: 20px;
     }
-    
-    // Auto-rotate testimonials
-    let testimonialInterval = setInterval(function() {
-      currentTestimonial++;
-      if (currentTestimonial >= testimonials.length) {
-        currentTestimonial = 0;
-      }
-      showTestimonial(currentTestimonial);
-    }, 8000); // Change every 8 seconds
-    
-    // Pause auto-rotation when hovering over testimonials
-    document.querySelector('.testimonial-slider').addEventListener('mouseenter', function() {
-      clearInterval(testimonialInterval);
-    });
-    
-    document.querySelector('.testimonial-slider').addEventListener('mouseleave', function() {
-      testimonialInterval = setInterval(function() {
-        currentTestimonial++;
-        if (currentTestimonial >= testimonials.length) {
-          currentTestimonial = 0;
-        }
-        showTestimonial(currentTestimonial);
-      }, 8000);
-    });
-  }
-  
-  // ===== Contact Form Handling =====
-  const contactForm = document.querySelector('#contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Simple validation
-      let isValid = true;
-      const formFields = contactForm.querySelectorAll('.form-control');
-      
-      formFields.forEach(field => {
-        if (!field.value.trim()) {
-          isValid = false;
-          field.style.borderColor = 'var(--red-color)';
-        } else {
-          field.style.borderColor = '';
-        }
-      });
-      
-      if (isValid) {
-        // Here you would normally send the form data to a server
-        // For demonstration purposes, show a success message
-        const formContainer = contactForm.parentElement;
-        const successMessage = document.createElement('div');
-        successMessage.className = 'success-message';
-        successMessage.innerHTML = `
-          <i class="fas fa-check-circle"></i>
-          <h3>Сообщение отправлено!</h3>
-          <p>Спасибо за обращение. Мы свяжемся с вами в ближайшее время.</p>
-        `;
-        
-        // Apply some basic styles
-        successMessage.style.textAlign = 'center';
-        successMessage.style.padding = '30px';
-        successMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.3)';
-        successMessage.style.borderRadius = '5px';
-        successMessage.style.marginTop = '20px';
-        
-        // Find and style the icon
-        const iconStyle = document.createElement('style');
-        iconStyle.textContent = `
-          .success-message i {
-            font-size: 4rem;
-            color: var(--orange-color);
-            margin-bottom: 20px;
-          }
-          .success-message h3 {
-            margin-bottom: 10px;
-            color: var(--orange-color);
-          }
-        `;
-        document.head.appendChild(iconStyle);
-        
-        // Replace form with success message
-        formContainer.innerHTML = '';
-        formContainer.appendChild(successMessage);
-      }
-    });
-    
-    // Reset validation styling on input
-    contactForm.querySelectorAll('.form-control').forEach(field => {
-      field.addEventListener('input', function() {
-        this.style.borderColor = '';
-      });
-    });
-  }
-  
-  // ===== Dynamic Year for Copyright =====
-  const yearElement = document.querySelector('.current-year');
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
-  }
-  
-  // ===== Preloader =====
-  const preloader = document.querySelector('.preloader');
-  if (preloader) {
-    window.addEventListener('load', function() {
-      preloader.style.opacity = '0';
-      setTimeout(function() {
-        preloader.style.display = 'none';
-      }, 500);
-    });
-  } else {
-    // Create preloader if it doesn't exist
-    const newPreloader = document.createElement('div');
-    newPreloader.className = 'preloader';
-    newPreloader.innerHTML = `
-      <div class="spinner">
-        <div class="dot1"></div>
-        <div class="dot2"></div>
-      </div>
-    `;
-    
-    // Add preloader styles
-    const preloaderStyle = document.createElement('style');
-    preloaderStyle.textContent = `
-      .preloader {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: var(--black-color);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        transition: opacity 0.5s;
-      }
-      
-      .spinner {
-        width: 40px;
-        height: 40px;
-        position: relative;
-      }
-      
-      .dot1, .dot2 {
-        width: 100%;
-        height: 100%;
-        border-radius: 50%;
-        background-color: var(--orange-color);
-        opacity: 0.6;
-        position: absolute;
-        top: 0;
-        left: 0;
-        animation: sk-bounce 2.0s infinite ease-in-out;
-      }
-      
-      .dot2 {
-        animation-delay: -1.0s;
-      }
-      
-      @keyframes sk-bounce {
-        0%, 100% { 
-          transform: scale(0.0);
-        } 50% { 
-          transform: scale(1.0);
-        }
-      }
-    `;
-    document.head.appendChild(preloaderStyle);
-    
-    document.body.prepend(newPreloader);
-    
-    window.addEventListener('load', function() {
-      newPreloader.style.opacity = '0';
-      setTimeout(function() {
-        newPreloader.style.display = 'none';
-      }, 500);
-    });
-  }
-  
-  // ===== Service Card Hover Effect =====
-  document.querySelectorAll('.service-card').forEach(card => {
-    card.addEventListener('mouseenter', function() {
-      this.style.transform = 'translateY(-10px)';
-      this.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.3)';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-      this.style.transform = '';
-      this.style.boxShadow = '';
-    });
-  });
-  
-  // ===== Parallax Effect for Hero =====
-  const hero = document.querySelector('.hero');
-  if (hero) {
-    window.addEventListener('scroll', function() {
-      const scrollPosition = window.pageYOffset;
-      hero.style.backgroundPosition = `50% ${scrollPosition * 0.5}px`;
-    });
-  }
-  
-  // ===== Counter Animation =====
-  const counterElements = document.querySelectorAll('.counter');
-  
-  function startCounter(element) {
-    const target = parseInt(element.getAttribute('data-target'));
-    const count = parseInt(element.innerText);
-    const increment = Math.ceil(target / 100);
-    
-    if (count < target) {
-      element.innerText = Math.min(count + increment, target);
-      setTimeout(() => startCounter(element), 20);
+    footer {
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
     }
-  }
-  
-  function checkCounters() {
-    counterElements.forEach(counter => {
-      const position = counter.getBoundingClientRect().top;
-      
-      if (position < window.innerHeight - 100) {
-        startCounter(counter);
-      }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Добро пожаловать на мой сайт</h1>
+    <nav>
+      <a href="#home">Главная</a>
+      <a href="#about">О нас</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+  </header>
+
+  <div class="content">
+    <section id="home">
+      <h2>Главная страница</h2>
+      <p>Это пример простого, но рабочего сайта, сделанного в качестве наброска.</p>
+    </section>
+
+    <section id="about">
+      <h2>О нас</h2>
+      <p>Здесь можно разместить информацию о компании или авторе сайта.</p>
+    </section>
+
+    <section id="contact">
+      <h2>Контакты</h2>
+      <p>Свяжитесь с нами по электронной почте: <a href="mailto:example@mail.com">example@mail.com</a></p>
+    </section>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 Мой сайт</p>
+  </footer>
+
+  <script>
+    // Простой скрипт для демонстрации работы JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('Сайт загружен и работает!');
     });
-  }
-  
-  // Initialize counters when in view
-  checkCounters();
-  window.addEventListener('scroll', checkCounters);
-});
+  </script>
+</body>
+</html>
