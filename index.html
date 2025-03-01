@@ -16,6 +16,15 @@
       color: #fff;
       padding: 20px;
       text-align: center;
+      position: relative;
+    }
+    header img {
+      max-width: 80px;
+      height: auto;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
     }
     nav a {
       color: #fff;
@@ -24,6 +33,30 @@
     }
     .content {
       padding: 20px;
+    }
+    /* Стили для ленты популярных работ */
+    #feed {
+      padding: 20px;
+      background-color: #fff;
+      margin: 20px auto;
+      max-width: 800px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    #feed h2 {
+      text-align: center;
+    }
+    .feed-item {
+      border-bottom: 1px solid #ddd;
+      padding: 15px 0;
+    }
+    .feed-item:last-child {
+      border-bottom: none;
+    }
+    .feed-item img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+      margin-bottom: 10px;
     }
     footer {
       background-color: #333;
@@ -38,6 +71,7 @@
 </head>
 <body>
   <header>
+    <img src="https://media.istockphoto.com/id/1225517650/uk/%D1%84%D0%BE%D1%82%D0%BE/%D0%BE%D0%B4%D0%B8%D0%BD-%D0%B2%D0%B5%D0%BB%D0%B8%D0%BA%D0%B8%D0%B9-%D0%B4%D1%83%D0%B1-%D0%BD%D0%B0-%D0%BB%D1%83%D0%B7%D1%96.jpg?s=612x612&w=0&k=20&c=xdHVH2LJ40EnQUaLl9PxSc1EI_8VANv2lPF-ag-lLWQ=" alt="Логотип сервера">
     <h1>Добро пожаловать на мой сайт</h1>
     <nav>
       <a href="#home">Главная</a>
@@ -61,6 +95,14 @@
       <h2>Контакты</h2>
       <p>Свяжитесь с нами по электронной почте: <a href="mailto:example@mail.com">example@mail.com</a></p>
     </section>
+
+    <!-- Секция ленты популярных работ -->
+    <section id="feed">
+      <h2>Популярные работы</h2>
+      <div id="feed-container">
+        <!-- Контент ленты будет добавлен скриптом -->
+      </div>
+    </section>
   </div>
 
   <footer>
@@ -68,10 +110,12 @@
   </footer>
 
   <script>
-    // Простой скрипт для демонстрации работы JavaScript
+    // Скрипт для базового вывода сообщения в консоль при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
       console.log('Сайт загружен и работает!');
     });
   </script>
+  <!-- Подключаем отдельный скрипт для ленты популярных работ -->
+  <script src="feed.js"></script>
 </body>
 </html>
